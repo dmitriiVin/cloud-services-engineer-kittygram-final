@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13.10
+    env_file: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: ${DOCKERHUB_USERNAME}/kittygram_backend:latest
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    depends_on:
+      - db
+    volumes:
+      - static:/app/collected_static
+      - media:/app/media
+
+  frontend:
+    image: ${DOCKERHUB_USERNAME}/kittygram_frontend:latest
+    expose:
+      - "8000"
+
+  gateway:
+    image: ${DOCKERHUB_USERNAME}/kittygram_gateway:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - static:/static
+      - media:/media
+
+volumes:
+  postgres_data:
+  static:
+  media:

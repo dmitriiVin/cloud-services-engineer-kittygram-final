@@ -105,8 +105,8 @@ jobs:
             DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
             DJANGO_DEBUG=False
             EOF
-            $SUDO docker-compose -f docker-compose.production.yml pull
-            $SUDO docker-compose -f docker-compose.production.yml up -d
+            $SUDO docker compose -f docker-compose.production.yml pull
+            $SUDO docker compose -f docker-compose.production.yml up -d
 
   post_deploy_tests:
     runs-on: ubuntu-latest
